@@ -73,46 +73,46 @@ on:
           - 'recovery'
           - 'boot'
           - 'vendorboot'
-jobs: 
-   TeamWin-Recovery-Project: 
-     runs-on: ubuntu-20.04 
-     permissions: 
-       contents: write 
-     steps: 
-       - name: Checkout 
-         uses: actions/checkout@master 
- 
-       - name: Free up space 
-         run: bash sh/RP/unin.sh 
- 
-       - name: Set up the Compilation environment 
-         run: bash sh/RP/sudo.sh 
- 
-       - name: Git Config 
-         run: | 
-           rm -rf ~/twrp 
-           mkdir ~/twrp 
-           cd ~/twrp 
-           git config --global user.email "${{ github.actor }}@users.noreply.github.com" 
-           git config --global user.name "${{ github.actor }}" 
- 
-       - name: Sync Minimal Manifest 
-         run: | 
-           cd ~/twrp 
-           repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_${{ inputs.MANIFEST_TYPE }}.git -b ${{ inputs.MANIFEST_BRANCH }} 
- 
-       - name: Sync Source 
-         run: | 
-           cd ~/twrp 
-           repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags 
-           rm -rf .rep 
- 
-       - name: Clone Device Tree 
-         run: | 
-           cd ~/twrp 
-           git clone -b ${{ inputs.DEVICE_TREE_BRANCH }} ${{ inputs.DEVICE_TREE_URL }} device/${{ inputs.BRAND }}/${{ inputs.DEVICE_CODE }} 
- 
-     - name: Clone Kernel Source 
+jobs:
+  TeamWin-Recovery-Project:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Free up space
+        run: bash sh/RP/unin.sh
+
+      - name: Set up the Compilation environment
+        run: bash sh/RP/sudo.sh
+
+      - name: Git Config
+        run: |
+          rm -rf ~/twrp
+          mkdir ~/twrp
+          cd ~/twrp
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          
+      - name: Sync Minimal Manifest
+        run: |
+          cd ~/twrp
+          repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_${{ inputs.MANIFEST_TYPE }}.git -b ${{ inputs.MANIFEST_BRANCH }}
+          
+      - name: Sync Source
+        run: |
+          cd ~/twrp
+          repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+          rm -rf .rep
+      
+      - name: Clone Device Tree
+        run: |
+          cd ~/twrp
+          git clone -b ${{ inputs.DEVICE_TREE_BRANCH }} ${{ inputs.DEVICE_TREE_URL }} device/${{ inputs.BRAND }}/${{ inputs.DEVICE_CODE }}
+
+      - name: Clone Kernel Source 
         run: |
           cd ~/twrp 
           git clone -b ${{ inputs.KERNEL_BRANCH }} ${{ inputs.KERNEL_URL }} kernel/${{ inputs.DEVICE_CODE }}
@@ -131,8 +131,8 @@ jobs:
           cd ~/twrp/kernel/${{ inputs.DEVICE_CODE }}/output/${{ inputs.DEVICE_CODE }}-${{ inputs.KERNEL_VERSION }}-${{ inputs.KERNEL_VARIANT }} 
           cp arch/arm64/boot/Image.gz-dtb ~/twrp/device/${{ inputs.BRAND }}/${{ inputs.DEVICE_CODE }}/kernel
  
-name: Compile Custom Recovery  
-         run: | 
+      - name: Compile Custom Recovery  
+         run: |
            sudo apt-get update 
            sudo apt-get -y install f2fs-tools 
            cd ~/twrp 
