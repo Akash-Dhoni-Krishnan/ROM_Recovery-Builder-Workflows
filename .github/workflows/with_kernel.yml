@@ -1,5 +1,5 @@
 name: TeamWin-RP Builder 
- on: 
+on: 
    workflow_dispatch: 
      inputs: 
        MANIFEST_TYPE: 
