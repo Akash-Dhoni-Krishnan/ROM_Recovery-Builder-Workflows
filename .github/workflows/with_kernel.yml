@@ -64,16 +64,16 @@ on:
        ADD_EXPORT: 
          description: 'Add "export"' 
          required: false 
-       BUILD_TARGET: 
-         description: 'Build Target' 
-         required: true 
-         default: 'recovery' 
-         type: choice 
-         options: 
-           - 'recovery' 
-           - 'boot' 
-           - 'vendorboot' 
- jobs: 
+       BUILD_TARGET:
+         description: 'Build Target'
+         required: true
+         default: 'recovery'
+         type: choice
+         options:
+          - 'recovery'
+          - 'boot'
+          - 'vendorboot'
+jobs: 
    TeamWin-Recovery-Project: 
      runs-on: ubuntu-20.04 
      permissions: 
