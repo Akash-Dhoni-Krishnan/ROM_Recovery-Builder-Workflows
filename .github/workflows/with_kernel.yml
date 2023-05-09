@@ -118,7 +118,7 @@ jobs:
           git clone -b ${{ inputs.KERNEL_BRANCH }} ${{ inputs.KERNEL_URL }} kernel/${{ inputs.DEVICE_CODE }}
  
       - name: Compile Kernel
-        run: |
+        run:  |
           cd ~/twrp/kernel/${{ inputs.DEVICE_CODE }} 
           export ARCH=arm64 
           export SUBARCH=arm64 
@@ -132,7 +132,7 @@ jobs:
           cp arch/arm64/boot/Image.gz-dtb ~/twrp/device/${{ inputs.BRAND }}/${{ inputs.DEVICE_CODE }}/kernel
  
       - name: Compile Custom Recovery  
-         run: |
+        run: |
            sudo apt-get update 
            sudo apt-get -y install f2fs-tools 
            cd ~/twrp 
@@ -142,17 +142,17 @@ jobs:
            . build/envsetup.sh 
            lunch ${{ inputs.MAKEFILE_TYPE }}_${{ inputs.DEVICE_CODE }}-eng 
            mka recoveryimage target_link_libraries+=-lf2fs 
-         continue-on-error: true
+        continue-on-error: true
  
-       - name: Rename File 
-         run: | 
+      - name: Rename File 
+        run: | 
            mv ~/twrp/out/target/product/${{ inputs.DEVICE_CODE }}/${{ inputs.BUILD_TARGET }}.img unofficialtwrp-${{ inputs.DEVICE_CODE }}.img 
  
-       - name: Upload to Release 
-         uses: softprops/action-gh-release@v1 
-         env: 
+      - name: Upload to Release 
+        uses: softprops/action-gh-release@v1 
+        env: 
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-         with: 
+        with: 
            name: Custom Recovery for ${{ inputs.DEVICE_CODE }} 
            tag_name: TWRP 
            body: | 
